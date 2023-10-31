@@ -64,3 +64,5 @@ configMaps:
   - name: nginx.conf
     mountPath: /usr/local/openresty/nginx/conf/nginx.conf 
     value: nginx
+
+type: LoadBalancer
