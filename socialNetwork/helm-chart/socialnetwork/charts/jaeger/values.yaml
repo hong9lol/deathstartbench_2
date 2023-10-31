@@ -47,3 +47,5 @@ configMaps:
   - name: service-config.json
     mountPath: /social-network-microservices/config/service-config.json
     value: service-config
+
+#type: LoadBalancer
