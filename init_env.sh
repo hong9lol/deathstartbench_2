@@ -34,7 +34,7 @@ echo 5. Expose nginx-server, media-front and jaeger
 # minikube service jaeger
 # minikube service list | grep jaeger |  awk '/[[:space:]]/ {print $8}' > jaeger_url.txt
 kubectl port-forward svc/nginx-thrift 8080:8080 &
-kubectl port-froward svc/media-frontend 8081:8081 &
+kubectl port-forward svc/media-frontend 8081:8081 &
 kubectl port-forward svc/jaeger 5775:5775 &
 kubectl port-forward svc/jaeger 6831:6831 &
 kubectl port-forward svc/jaeger 6832:6832 &
