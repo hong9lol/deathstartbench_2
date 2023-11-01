@@ -1,8 +1,6 @@
 #!/bin/sh
 
 echo ====== Start ======
-sudo systemctl daemon-reload
-sudo systemctl restart kubelet
 
 # ---------------------------------------- #
 echo 1. Init Minikube
@@ -11,10 +9,8 @@ minikube delete
 minikube start --nodes=2 --cpus=max
 
 # ---------------------------------------- #
-echo 2. Build wrk
-cd ./wrk2
-make
-cd ..
+echo 2. Install wrk
+brew install wrk
 
 # ---------------------------------------- #
 echo 3. Install helm package
