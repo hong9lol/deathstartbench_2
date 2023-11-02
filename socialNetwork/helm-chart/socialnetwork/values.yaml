@@ -5,9 +5,15 @@ global:
   serviceType: ClusterIP
   dockerRegistry: docker.io
   defaultImageVersion: latest
+  resources: True
+  rcpu: "100m"
+  rmemory: "64Mi"
+  lcpu: "100m"
+  lmemory: "128Mi"
   hpa:
     maxReplicas: 20
     minReplicas: 1
+    tcu: 80
   redis:
     cluster:
       enabled: false

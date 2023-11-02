@@ -42,13 +42,13 @@ spec:
         - {{ $arg }}
         {{- end -}}
         {{- end }}
-        {{- if .resources }}  
         resources:
-          {{ tpl .resources . | nindent 6 | trim }}
-        {{- else if hasKey $.Values.global "resources" }}           
-        resources:
-          {{ tpl $.Values.global.resources $ | nindent 6 | trim }}
-        {{- end }}  
+          requests:
+            cpu: {{ tpl $.Values.global.rcpu $ }}
+            memory: {{ tpl $.Values.global.rmemory $ }}
+          limits:
+            cpu: {{ tpl $.Values.global.lcpu $ }}
+            memory: {{ tpl $.Values.global.lmemory $ }}
         {{- if $.Values.configMaps }}        
         volumeMounts: 
         {{- range $configMap := $.Values.configMaps }}
