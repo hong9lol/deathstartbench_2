@@ -3,6 +3,8 @@
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
+  annotations:
+    "helm.sh/hook": "post-install"
   name: {{ .Values.name }}
   namespace: default
 spec:

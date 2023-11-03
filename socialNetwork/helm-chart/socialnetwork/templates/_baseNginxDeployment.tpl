@@ -48,7 +48,6 @@ spec:
             memory: {{ tpl $.Values.global.rmemory $ }}
           limits:
             cpu: {{ tpl $.Values.global.lcpu $ }}
-            memory: {{ tpl $.Values.global.lmemory $ }}
         {{- if $.Values.configMaps }}        
         volumeMounts: 
         {{- range $configMap := $.Values.configMaps }}
