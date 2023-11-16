@@ -17,3 +17,5 @@ configMaps:
   - name: redis.conf
     mountPath: /social-network-microservices/config/redis.conf
     value: redis
+replicas: 2
+minReplicas: 2

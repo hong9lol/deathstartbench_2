@@ -17,3 +17,9 @@ configMaps:
   - name: redis.conf
     mountPath: /social-network-microservices/config/redis.conf
     value: redis
+rcpu: 500m
+rmemory: 1000Mi
+lcpu: 500m
+lmemory: 1000Mi
+replicas: 5
+minReplicas: 5

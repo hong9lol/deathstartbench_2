@@ -6,9 +6,9 @@ global:
   dockerRegistry: docker.io
   defaultImageVersion: latest
   resources: True
-  rcpu: "200m"
+  rcpu: "100m"
   rmemory: "64Mi"
-  lcpu: "200m"
+  lcpu: "150m"
   lmemory: "128Mi"
   hpa:
     maxReplicas: 20

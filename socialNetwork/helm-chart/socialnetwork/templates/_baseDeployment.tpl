@@ -46,11 +46,11 @@ spec:
         {{- end -}}
         {{- end }}
         resources:
-          requests:
-            cpu: {{ tpl $.Values.global.rcpu $ }}
-            memory: {{ tpl $.Values.global.rmemory $ }}
+          requests:  
+            cpu: {{ .rcpu | default $.Values.global.rcpu }}
+            memory: {{ .rmemory | default $.Values.global.rmemory }}
           limits:
-            cpu: {{ tpl $.Values.global.lcpu $ }}
+            cpu: {{ .lcpu | default $.Values.global.lcpu }}
         {{- if $.Values.configMaps }}        
         volumeMounts: 
         {{- range $configMap := $.Values.configMaps }}

@@ -66,3 +66,7 @@ configMaps:
     value: nginx
 
 type: LoadBalancer
+# replicas: 5
+# minReplicas: 5
+rcpu: 800m
+lcpu: 1000m

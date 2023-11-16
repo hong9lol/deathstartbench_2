@@ -19,7 +19,7 @@ configMaps:
     mountPath: /social-network-microservices/config/mongod.conf
     value: mongod
 
-rcpu: 500m
-rmemory: 1000Mi
-lcpu: 500m
-lmemory: 1000Mi
+# rcpu: 500m
+# rmemory: 1000Mi
+# lcpu: 500m
+# lmemory: 1000Mi

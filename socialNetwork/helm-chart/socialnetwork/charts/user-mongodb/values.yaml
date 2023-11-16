@@ -20,6 +20,8 @@ configMaps:
     value: mongod
 
 rcpu: 500m
-rmemory: 1000Mi
-lcpu: 500m
-lmemory: 1000Mi
+rmemory: 500Mi
+lcpu: 800m
+lmemory: 500Mi
+replicas: 6
+minReplicas: 6
