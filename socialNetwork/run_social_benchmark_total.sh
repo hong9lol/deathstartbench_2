@@ -12,9 +12,22 @@ kubectl get svc | grep nginx-thrift |  awk '/[[:space:]]/ {print $4}' > target_u
 
 t=10
 #array_c=( 50 100 200 300 400 500 600 700 800 900 1000 1100 1200 1300 1400 1500 )
+# Set 2:3:5
 array_c=( 10 20 40 60 80 100 )
 array_u=( 15 30 60 90 120 150 )
 array_h=( 25 50 100 150 200 250 )
+
+# Set 3:4:3
+# array_c=( 15 30 60 90 120 150 )
+# array_u=( 20 40 80 120 1600 200 )
+# array_h=( 15 30 60 90 120 150 )
+
+# Set :5:3:2
+# array_c=( 25 50 100 150 200 250 )
+# array_u=( 15 30 60 90 120 150 )
+# array_h=( 10 20 40 60 80 100 )
+array_users=( 50 100 200 300 400 500 )
+
 d=600
 ip=`cat target_url.txt`
 
@@ -22,10 +35,10 @@ compose="http://$ip:8080/wrk2-api/post/compose"
 home="http://$ip:8080/wrk2-api/home-timeline/read"
 user="http://$ip:8080/wrk2-api/user-timeline/read"
 
-echo TEST APIs rate [6:3:1]
+echo TEST APIs rate [5:3:2]
 echo $home
 echo $user
-echo $composeps -
+echo $compose
 echo " "
 
 echo ====== Social Benchmark Start ======
@@ -37,24 +50,27 @@ kubectl get pod >> output.txt
 
 i=0
 
-for c in ${array_c[@]}
+for c in 0 1 2 3 4 5
 do
     ((i=i+1))
-    users=$(($t * $c))
+    users=$(($t * ${array_users[$c]}))
     echo Test ${i} with ${users} users
     echo " " >> output.txt
+    echo ${array_c[$c]}
+    echo ${array_u[$c]}
+    echo ${array_h[$c]}
     
     timestamp=`date`
     echo [Test ${i}] $timestamp >> output.txt
     # if [ "$c" = "20" ]; then
     #     wrk -t ${t} -c ${c} -d 60 -s ./wrk2/scripts/social-network/compose-post.lua $compose --latency -H 'Connection: close' >> output.txt
     # else
-    echo Run user
-    wrk -t ${t} -c ${c} -d 360 -s ./wrk2/scripts/social-network/read-user-timeline.lua $user --latency -H 'Connection: close' >> user.txt & 
-    echo Run home
-    wrk -t ${t} -c ${c} -d 360 -s ./wrk2/scripts/social-network/read-home-timeline.lua $home --latency -H 'Connection: close' >> home.txt &
-    echo Run Post
-    wrk -t ${t} -c ${c} -d 360 -s ./wrk2/scripts/social-network/compose-post.lua $compose --latency -H 'Connection: close' >> output.txt
+    echo Run user ${array_u[$c]}
+    wrk -t ${t} -c ${array_u[$c]} -d 360 -s ./wrk2/scripts/social-network/compose-post.lua $user --latency -H 'Connection: close' >> user.txt & 
+    echo Run home ${array_h[$c]}
+    wrk -t ${t} -c ${array_h[$c]} -d 360 -s ./wrk2/scripts/social-network/compose-post.lua $home --latency -H 'Connection: close' >> home.txt &
+    echo Run Post ${array_c[$c]}
+    wrk -t ${t} -c ${array_c[$c]} -d 360 -s ./wrk2/scripts/social-network/compose-post.lua $compose --latency -H 'Connection: close' >> output.txt
 
     # fi
     kubectl get pod >> output.txt

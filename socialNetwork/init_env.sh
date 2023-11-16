@@ -18,7 +18,7 @@ make
 cd -
 
 # ---------------------------------------- #
-echo 3k . Install helm package
+echo 3 . Install helm package
 helm install social-network ./helm-chart/socialnetwork/
 sleep 120
 
