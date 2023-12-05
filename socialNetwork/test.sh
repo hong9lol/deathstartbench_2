@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 
 # num of threads
@@ -30,4 +30,47 @@ echo ${array_h[$c]}
 for c in ${array_users[@]}
 do
     echo $c    
+done
+
+
+r=10
+
+# compose user home
+ratio=( 1 3 6 )
+
+# 증가 속도 느림
+connections=( 5 10 20 50 100)
+# 증가 속도 빠름
+# connections=( 50 500 1000 )
+
+ip=`cat target_url.txt`
+
+compose_url="http://$ip:8080/wrk2-api/post/compose"
+home_url="http://$ip:8080/wrk2-api/home-timeline/read"
+user_url="http://$ip:8080/wrk2-api/user-timeline/read"
+
+echo TEST APIs 
+echo $home_url
+echo $user_url
+echo $compose_url
+echo " "
+
+echo ====== Social Benchmark Start ======
+
+echo [Ratio] ${ratio[0]} ${ratio[1]} ${ratio[2]}
+
+# tc count
+i=0
+for conn in ${connections[@]}
+do
+    ((i=i+1))
+    users=$((${conn}))
+    echo Test ${i}    
+
+    conn_compose=$((${conn} * ${ratio[0]}))
+    conn_user=$((${conn} * ${ratio[1]}))
+    conn_home=$((${conn} * ${ratio[2]}))
+    echo Requests of Compose: $((${conn_compose} * ${r})) # wrk send 5 requests per sec
+    echo Requests of User: $((${conn_user} * ${r}))
+    echo Requests of Home: $((${conn_home} * ${r}))
 done

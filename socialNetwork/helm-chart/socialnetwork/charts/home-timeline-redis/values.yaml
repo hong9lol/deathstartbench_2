@@ -12,14 +12,11 @@ container:
   name: home-timeline-redis
   ports: 
   - containerPort: 6379
+  rcpu: 100m
+  rmemory: 300Mi
+  lcpu: 1500m
 
 configMaps:
   - name: redis.conf
     mountPath: /social-network-microservices/config/redis.conf
     value: redis
-rcpu: 800m
-rmemory: 500Mi
-lcpu: 800m
-lmemory: 500Mi
-replicas: 4
-minReplicas: 4

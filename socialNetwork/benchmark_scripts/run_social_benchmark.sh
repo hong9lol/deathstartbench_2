@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # set path
 logPath=$1
@@ -9,16 +9,19 @@ kubectl get svc | grep nginx-thrift |  awk '/[[:space:]]/ {print $4}' > target_u
 # num of threads
 t=5
 
-# test duration (15m)
-duration=900
+# request per second
+rps=10
+
+# test duration
+duration=120
 
 # ratio #data set 뽑을 때는 랜덤으로
 ratio=()
 ratio_raw=()
 while true; do
-    # 1부터 9 사이의 랜덤 숫자 2개 생성
-    num1=$((RANDOM % 9 + 1))
-    num2=$((RANDOM % 9 + 1))
+    # 1부터 3, 5 사이의 랜덤 숫자 2개 생성
+    num1=$((RANDOM % 3 + 1))
+    num2=$((RANDOM % 5 + 1))
 
     # 세 번째 숫자 계산
     num3=$((10 - num1 - num2))
@@ -41,10 +44,30 @@ done
 # compose user home
 ratio=( 2 3 5 )
 
-# 증가 속도 느림
-connections=( 5 10 20 50 100)
-# 증가 속도 빠름
-# connections=( 50 500 1000 )
+# 증가 속도 - 50 70 100 이거 세개로 샘플링하면 될듯
+# connections=( 50 70 100)
+
+#Test #1 low-increase
+#connections=( 20 30 40 50 60 70 80 90 100 100 )
+
+#Test #2 high-increase
+#connections=( 20 45 75 100 100 100 100 100 100 100 )
+
+#Test #3 spike
+#connections=( 20 20 20 100 100 100 100 100 100 100 )
+
+# New
+#Test #1 low-increase
+connections=( 20 40 60 80 100 120 140 160 180 180 180 180 )
+
+#Test #2 high-increase
+#connections=( 20 20 20 70 120 170 220 220 220 220 220 220 )
+
+#Test #3 spike
+#connections=( 20 20 20 100 100 100 100 200 200 200 200 200 )
+
+#Test #4 added new
+#connections=( 10 10 10 50 100 150 200 200 200 200 200 200 )
 
 ip=`cat target_url.txt`
 
@@ -71,31 +94,39 @@ i=0
 for conn in ${connections[@]}
 do
     ((i=i+1))
-    users=$((${t} * ${conn}))
-    echo Test ${i} with ${users} users
+    users=$((${conn}))
+    echo Test ${i}
     echo " " >> $logPath/output.log
 
-    conn_compose=$((${conn}  * ${ratio[0]}))
-    conn_user=$((${conn} * ${ratio[1]} ))
+    conn_compose=$((${conn} * ${ratio[0]}))
+    conn_user=$((${conn} * ${ratio[1]}))
     conn_home=$((${conn} * ${ratio[2]}))
-    echo Requests of Compose: $((${conn_compose} * ${t} * 5)) # wrk send 5 requests per sec
-    echo Requests of User: $((${conn_user} * ${t} * 5))
-    echo Requests of Home: $((${conn_home} * ${t} * 5))
+    echo Requests of Compose: $((${conn_compose})) # wrk send 5 requests per sec
+    echo Requests of User: $((${conn_user}))
+    echo Requests of Home: $((${conn_home}))
 
     timestamp=`date`
     echo [Test ${i}] $timestamp >> $logPath/output.log
     
-    # user
-    wrk -t ${t} -c $conn_user -d $duration -s ./../wrk2/scripts/social-network/read-user-timeline.lua $user_url --latency -H 'Connection: close' >> $logPath/output.log & 
-    # home
-    wrk -t ${t} -c $conn_home -d $duration -s ./../wrk2/scripts/social-network/read-home-timeline.lua $home_url --latency -H 'Connection: close' >> $logPath/output.log &
-    # compose
-    wrk -t ${t} -c $conn_compose -d $duration -s ./../wrk2/scripts/social-network/compose-post.lua $compose_url --latency -H 'Connection: close' >> $logPath/output.log
+    # # user
+    # wrk -t ${t} -c $conn_user -d $duration -s ./../wrk2/scripts/social-network/read-user-timeline.lua $user_url --latency -H 'Connection: close' >> $logPath/output.log & 
+    # # home
+    # wrk -t ${t} -c $conn_home -d $duration -s ./../wrk2/scripts/social-network/read-home-timeline.lua $home_url --latency -H 'Connection: close' >> $logPath/output.log &
+    # # compose
+    # wrk -t ${t} -c $conn_compose -d $duration -s ./../wrk2/scripts/social-network/compose-post.lua $compose_url --latency -H 'Connection: close' >> $logPath/output.log
     
-    kubectl get pod >> $logPath/output.log
-    kubectl top pod >> $logPath/output.log
-    kubectl get horizontalpodautoscalers.autoscaling >> $logPath/output.log
+    # Ubuntu
+    # user
+    ../../wrk2/wrk -D fixed -t${t} -c${conn_user} -d${duration} -R${conn_user} -r -s ./../wrk2/scripts/social-network/read-user-timeline.lua $user_url --latency -H 'Connection: close' >> $logPath/output.log & 
+    # home
+    ../../wrk2/wrk -D fixed -t${t} -c${conn_home} -d${duration} -R${conn_home} -r -s ./../wrk2/scripts/social-network/read-home-timeline.lua $home_url --latency -H 'Connection: close' >> $logPath/output.log  &
+    # compose
+    ../../wrk2/wrk -D fixed -t${t} -c${conn_compose} -d${duration} -R${conn_compose} -r -s ./../wrk2/scripts/social-network/compose-post.lua $compose_url --latency -H 'Connection: close' >> $logPath/output.log
 
+    
+    kubectl top pod >> $logPath/output.log 
+    kubectl get horizontalpodautoscalers.autoscaling >> $logPath/output.log 
+    kubectl get pod >> $logPath/output.log &
 done
 
 timestamp=`date`

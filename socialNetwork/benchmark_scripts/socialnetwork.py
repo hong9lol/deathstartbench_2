@@ -7,30 +7,46 @@ def execute_cmd(cmd):
 
 standard_deployment = "nginx-thrift"
 # 2 3 5 ratio
-resource_rate={"compose-post-service":12.0, 
-"home-timeline-service":7.0,
-"nginx-thrift":28.0,
-"post-storage-service":15.0,
-"social-graph-service":3.0,
-"text-service":8.0,
-"unique-id-service":1.0 ,
-"url-shorten-service":4.0,
-"user-mention-service":4.0,
-"user-service":1.0,
-"user-timeline-service":17.0
+resource_rate={"compose-post-service" :10.0, 
+"home-timeline-service"               :6.2,
+"nginx-thrift"                        :30.4,
+"post-storage-service"                :20.4,
+"social-graph-service"                :2.3,
+"text-service"                        :5.7,
+"unique-id-service"                   :0.8,
+"url-shorten-service"                 :2.8,
+"user-mention-service"                :2.6,
+"user-service"                        :0.7,
+"user-timeline-service"               :18.1
 }
 
-resource_usage={"compose-post-service":0, 
-"home-timeline-service":0,
-"nginx-thrift":0,
-"post-storage-service":0,
-"social-graph-service":0,
-"text-service":0,
-"unique-id-service":0 ,
-"url-shorten-service":0,
-"user-mention-service":0,
-"user-service":0,
-"user-timeline-service":0
+
+# 1 3 6 ratio
+# resource_rate={
+# "compose-post-service" : 11.3 , 
+# "home-timeline-service": 4.2  ,
+# "nginx-thrift"         : 29.7 ,
+# "post-storage-service" : 20.8 ,
+# "social-graph-service" : 3.4  ,
+# "text-service"         : 7.1  ,
+# "unique-id-service"    : 0.9  ,
+# "url-shorten-service"  : 2.8  ,
+# "user-mention-service" : 3.2  ,
+# "user-service"         : 0.9  ,
+# "user-timeline-service": 15.9
+# }
+
+resource_usage={"compose-post-service":0.0, 
+"home-timeline-service":0.0,
+"nginx-thrift":0.0,
+"post-storage-service":0.0,
+"social-graph-service":0.0,
+"text-service":0.0,
+"unique-id-service":0.0 ,
+"url-shorten-service":0.0,
+"user-mention-service":0.0,
+"user-service":0.0,
+"user-timeline-service":0.0
 }
 
 def main():    
@@ -59,8 +75,8 @@ def main():
             if deployment == standard_deployment:
                 continue
             
-            num_of_pod = math.ceil(resource_usage[deployment] / 80)
-            if num_of_pod <= int(deployment_replica_status[deployment]):
+            num_of_pod = math.ceil(resource_usage[deployment] / 80.0) 
+            if num_of_pod < int(deployment_replica_status[deployment]):
                 continue
             print("do scale for " + deployment + " with " + str(num_of_pod) + " replica(s)")
             execute_cmd("kubectl scale --replicas=" + str(num_of_pod) + " deployment/" + deployment)
@@ -68,8 +84,8 @@ def main():
         
         # init
         for deployment in resource_usage:
-            resource_usage[deployment] = 0
-        time.sleep(30)
+            resource_usage[deployment] = 0.0
+        time.sleep(15)
 
 
 if __name__ == "__main__":

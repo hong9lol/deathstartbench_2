@@ -8,10 +8,10 @@ global:
   resources: True
   rcpu: "100m"
   rmemory: "64Mi"
-  lcpu: "150m"
+  lcpu: "120m"
   lmemory: "128Mi"
   hpa:
-    maxReplicas: 20
+    maxReplicas: 30
     minReplicas: 1
     tcu: 80
   redis:

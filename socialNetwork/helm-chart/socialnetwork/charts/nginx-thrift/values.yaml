@@ -42,7 +42,7 @@ initContainer:
   - name: keys
     mountPath: /keys
   command: "/bin/sh" 
-  args: ["-c", "git clone https://github.com/delimitrou/DeathStarBench.git /DeathStarBench &&
+  args: ["-c", "git clone https://github.com/hong9lol/DeathStarBench /DeathStarBench &&
             cp -r /DeathStarBench/socialNetwork/gen-lua/* /gen-lua/ &&
             cp -r /DeathStarBench/socialNetwork/docker/openresty-thrift/lua-thrift/* /lua-thrift/ &&
             cp -r /DeathStarBench/socialNetwork/nginx-web-server/lua-scripts/* /lua-scripts/ &&
@@ -66,7 +66,7 @@ configMaps:
     value: nginx
 
 type: LoadBalancer
-# replicas: 5
-# minReplicas: 5
-# rcpu: 800m
-# lcpu: 1000m
+replicas: 1
+minReplicas: 1
+maxReplicas: 30
+# tcu: 60

@@ -13,13 +13,11 @@ container:
   name: media-mongodb
   ports: 
   - containerPort: 27017
+  rcpu: 500m
+  rmemory: 300Mi
+  lcpu: 1000m
 
 configMaps:
   - name: mongod.conf
     mountPath: /social-network-microservices/config/mongod.conf
     value: mongod
-
-# rcpu: 500m
-# rmemory: 1000Mi
-# lcpu: 500m
-# lmemory: 1000Mi

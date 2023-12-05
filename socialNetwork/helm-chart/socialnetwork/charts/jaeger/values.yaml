@@ -14,6 +14,7 @@ ports:
     targetPort: 5778
   - port: 16686
     targetPort: 16686
+    nodePort: 30008
   - port: 14268
     targetPort: 14268
   - port: 9411

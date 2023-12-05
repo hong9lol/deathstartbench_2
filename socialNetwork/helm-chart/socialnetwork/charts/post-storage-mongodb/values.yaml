@@ -13,15 +13,14 @@ container:
   name: post-storage-mongodb
   ports: 
   - containerPort: 27017
+  rcpu: 1000m
+  rmemory: 300Mi
+  lcpu: 2000m
 
 configMaps:
   - name: mongod.conf
     mountPath: /social-network-microservices/config/mongod.conf
     value: mongod
 
-rcpu: 800m
-rmemory: 500Mi
-lcpu: 800m
-lmemory: 500Mi
-replicas: 12
-minReplicas: 12
+replicas: 3
+minReplicas: 3

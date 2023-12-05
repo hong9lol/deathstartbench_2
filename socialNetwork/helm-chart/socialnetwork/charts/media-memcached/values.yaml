@@ -10,6 +10,9 @@ container:
   name: media-memcached
   ports: 
   - containerPort: 11211
+  rcpu: 500m
+  rmemory: 300Mi
+  lcpu: 1000m
 
 configMaps:
   - name: jaeger-config.yml

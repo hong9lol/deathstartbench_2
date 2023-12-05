@@ -1,3 +1,4 @@
+
 math.random(); math.random(); math.random()
 
 local charset = {'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's',
@@ -9,6 +10,7 @@ local charset = {'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's',
 local decset = {'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'}
 
 -- load env vars
+-- local max_user_index = tonumber(os.getenv("max_user_index")) or 962
 local max_user_index = tonumber(os.getenv("max_user_index")) or 962
 
 local function stringRandom(length)
@@ -106,10 +108,11 @@ local function read_home_timeline()
   end
 
 request = function()
-    local read_home_timeline_ratio = 0.30
+    -- cur_time = math.floor(socket.gettime())
+    local read_home_timeline_ratio = 0.60
     local read_user_timeline_ratio = 0.30
-    local compose_post_ratio       = 0.40
-
+    local compose_post_ratio       = 0.10
+    
     local coin = math.random()
     if coin < read_home_timeline_ratio then
       return read_home_timeline()

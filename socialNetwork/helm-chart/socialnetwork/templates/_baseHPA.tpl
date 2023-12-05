@@ -10,7 +10,7 @@ metadata:
 spec:
   maxReplicas: {{ .Values.maxReplicas | default .Values.global.hpa.maxReplicas }}
   minReplicas: {{ .Values.minReplicas | default .Values.global.hpa.minReplicas }}
-  targetCPUUtilizationPercentage: {{ .Values.maxReplicas | default .Values.global.hpa.tcu }}
+  targetCPUUtilizationPercentage: {{ .Values.tcu | default .Values.global.hpa.tcu }}
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment

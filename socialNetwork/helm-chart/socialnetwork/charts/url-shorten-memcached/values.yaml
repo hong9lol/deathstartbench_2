@@ -10,6 +10,10 @@ container:
   name: url-shorten-memcached
   ports: 
   - containerPort: 11211
+  rcpu: 500m
+  rmemory: 300Mi
+  lcpu: 1000m
+
 
 configMaps:
   - name: jaeger-config.yml
@@ -19,9 +23,3 @@ configMaps:
   - name: service-config.json
     mountPath: /social-network-microservices/config/service-config.json
     value: service-config
-rcpu: 800m
-rmemory: 800Mi
-lcpu: 800m
-lmemory: 800Mi
-replicas: 2
-minReplicas: 2

@@ -1,2 +1,4 @@
-{{ include "socialnetwork.templates.baseService" . }}
- 
+{{ include "socialnetwork.templates.baseService_jaeger" . }}
+
+# need to do this
+#gcloud compute firewall-rules create test-node-port --allow tcp:30008 --project profound-shell-406006

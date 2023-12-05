@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 echo "\n[Log Top and HPA]\n"
 logPath=$1
@@ -20,17 +20,17 @@ do
     timestamp=`date`
     
     echo [\#$i Time] $timestamp >> $logPath/$getPod
-    kubectl get pod >> $logPath/$getPod
+    kubectl get pod >> $logPath/$getPod &
 
     echo [\#$i Time] $timestamp >> $logPath/$top
-    kubectl top pod >> $logPath/$top
+    kubectl top pod >> $logPath/$top  &
 
     echo [\#$i Time] $timestamp >> $logPath/$hpa
-    kubectl get horizontalpodautoscalers.autoscaling >> $logPath/$hpa
+    kubectl get horizontalpodautoscalers.autoscaling >> $logPath/$hpa  &
 
     sleep 10
-    if [ $i -eq 91 ]; then
-        break
-    fi
+    # if [ $i -eq 91 ]; then
+    #     break
+    # fi
 done
 

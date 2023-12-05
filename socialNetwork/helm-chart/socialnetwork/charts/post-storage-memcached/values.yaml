@@ -11,6 +11,9 @@ container:
   name: post-storage-memcached
   ports: 
   - containerPort: 11211
+  rcpu: 500m
+  rmemory: 300Mi
+  lcpu: 1000m
 
 configMaps:
   - name: jaeger-config.yml
@@ -20,9 +23,3 @@ configMaps:
   - name: service-config.json
     mountPath: /social-network-microservices/config/service-config.json
     value: service-config
-rcpu: 500m
-rmemory: 500Mi
-lcpu: 700m
-lmemory: 500Mi
-replicas: 4
-minReplicas: 4

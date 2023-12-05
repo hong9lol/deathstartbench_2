@@ -75,6 +75,6 @@ request = function()
     body   = "username=" .. username .. "&user_id=" .. user_id ..
         "&text=" .. text .. "&media_ids=" .. "&post_type=0"
   end
-
+  
   return wrk.format(method, path, headers, body)
 end
